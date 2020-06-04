@@ -3,8 +3,25 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                echo "Hello World"
+                retry(3) {
+                    sh 'echo "Hello World at $(date)"'
+                }
+
+                sleep 10
+
+                sh 'echo "Exec after time out at $(date)"'
             }
+        }
+    }
+    post {
+        always {
+            echo 'Runs always'
+        }
+        success {
+            echo 'It\'s a success!'
+        }
+        failure {
+            echo 'Oh no! It failed'
         }
     }
 }
